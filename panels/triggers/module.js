@@ -64,7 +64,12 @@ function (angular, app, _, config, PanelMeta) {
         params.tag = $scope.panel.tags;
       }
 
-      return backendSrv.search(params).then(function(result) {
+      /*return backendSrv.search(params).then(function(result) {
+        $scope.dashList = result;
+        $scope.panelRenderingComplete();
+      });*/
+
+      return $scope.datasource.zabbixAPI.getTriggers().then(function(result) {
         $scope.dashList = result;
         $scope.panelRenderingComplete();
       });

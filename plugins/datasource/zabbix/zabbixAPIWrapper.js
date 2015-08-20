@@ -512,6 +512,22 @@ function (angular, _) {
       });
     };
 
+    p.getTriggers = function() {
+      var params = {
+        output: ['triggerid', 'description'],
+        expandDescription: true
+      };
+
+      return this.performZabbixAPIRequest('trigger.get', params)
+        .then(function (triggers) {
+          return _.map(triggers, function (trigger) {
+            return {
+              title: trigger.description
+            };
+          });
+        });
+    };
+
     p.getITService = function(/* optional */ serviceids) {
       var params = {
         output: 'extend',
