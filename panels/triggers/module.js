@@ -39,7 +39,7 @@ function (angular, app, _, config, PanelMeta) {
 
     _.defaults($scope.panel, defaults);
 
-    $scope.dashList = [];
+    $scope.triggerList = [];
 
     $scope.init = function() {
       panelSrv.init($scope);
@@ -69,10 +69,21 @@ function (angular, app, _, config, PanelMeta) {
         $scope.panelRenderingComplete();
       });*/
 
-      return $scope.datasource.zabbixAPI.getTriggers().then(function(result) {
-        $scope.dashList = result;
-        $scope.panelRenderingComplete();
-      });
+      return $scope.datasource.zabbixAPI.getTriggers($scope.panel.limit)
+        .then(function(result) {
+          $scope.triggerList = _.map(result, function (trigger) {
+            var lastchange = new Date(+trigger.lastchange * 1000);
+            var age = new Date(Date.now() - lastchange);
+            return {
+              host: trigger.host,
+              description: trigger.description,
+              priority: trigger.priority,
+              lastchange: lastchange.toUTCString(),
+              age: age.toLocaleTimeString(),
+            };
+          });
+          $scope.panelRenderingComplete();
+        });
     };
 
     $scope.init();

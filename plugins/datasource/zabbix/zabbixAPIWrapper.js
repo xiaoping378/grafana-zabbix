@@ -512,20 +512,25 @@ function (angular, _) {
       });
     };
 
-    p.getTriggers = function() {
+    p.getTriggers = function(limit) {
       var params = {
-        output: ['triggerid', 'description'],
-        expandDescription: true
+        output: 'extend',
+        expandDescription: true,
+        expandData: true,
+        only_true: true,
+        limit: limit
       };
 
-      return this.performZabbixAPIRequest('trigger.get', params)
+      return this.performZabbixAPIRequest('trigger.get', params);
+
+      /*return this.performZabbixAPIRequest('trigger.get', params)
         .then(function (triggers) {
           return _.map(triggers, function (trigger) {
             return {
               title: trigger.description
             };
           });
-        });
+        });*/
     };
 
     p.getITService = function(/* optional */ serviceids) {

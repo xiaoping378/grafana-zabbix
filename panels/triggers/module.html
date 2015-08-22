@@ -1,13 +1,30 @@
 <grafana-panel>
-	<div class="dashlist">
-	<div class="dashlist-item" ng-repeat="dash in dashList">
-		<a class="dashlist-link dashlist-link-{{dash.type}}" href="dashboard/{{dash.uri}}">
-			<span class="dashlist-title">
-				{{dash.title}}
-			</span>
-			<span class="dashlist-star">
-				<i class="fa" ng-class="{'fa-star': dash.isStarred, 'fa-star-o': !dash.isStarred}"></i>
-			</span>
-		</a>
-	</div>
+  <div style="padding-top: 10px">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Host</th>
+          <th style="width: 50%">Issue</th>
+          <th>Last change</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="" ng-repeat="trigger in triggerList">
+          <td>
+            <span class="template-variable">{{trigger.host}}</span>
+          </td>
+          <td>
+            {{trigger.description}}
+          </td>
+          <td>
+            {{trigger.lastchange}}
+          </td>
+          <td>
+            {{trigger.age}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </grafana-panel>
