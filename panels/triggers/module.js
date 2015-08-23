@@ -79,7 +79,8 @@ function (angular, app, _, config, PanelMeta) {
       return $scope.datasource.zabbixAPI.getTriggers($scope.panel.limit)
         .then(function(triggers) {
           var promises = _.map(triggers, function (trigger) {
-            var lastchange = new Date(+trigger.lastchange * 1000);
+            var lastchange = new Date(trigger.lastchange * 1000);
+            var lastchangeUnix = trigger.lastchange;
             var now = new Date();
 
             // Consider local time offset
@@ -91,7 +92,7 @@ function (angular, app, _, config, PanelMeta) {
             triggerObj.color = triggerColors[trigger.priority];
 
             // Request acknowledges for trigger
-            return $scope.datasource.zabbixAPI.getAcknowledges(trigger.triggerid)
+            return $scope.datasource.zabbixAPI.getAcknowledges(trigger.triggerid, lastchangeUnix)
               .then(function (acknowledges) {
                 if (acknowledges.length) {
                   triggerObj.acknowledges = _.map(acknowledges, function (ack) {

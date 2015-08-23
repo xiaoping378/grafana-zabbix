@@ -83,13 +83,12 @@
             <!-- Trigger state -->
             <span ng-if="trigger.state === '1'"
                   bs-tooltip="'{{trigger.error}}'"
-                  data-placement="top"
                   style="padding: 4px">
               <i class="fa fa-question-circle"></i>
             </span>
             <!-- Trigger acknowledges -->
             <a ng-if="trigger.acknowledges"
-                  bs-tooltip="'Acknowledges'"
+                  bs-tooltip="'Acknowledges ({{trigger.acknowledges.length}})'"
                   data-toggle="collapse"
                   data-target="#acknowledges-{{trigger.triggerid}}">
               <span style="padding: 4px">

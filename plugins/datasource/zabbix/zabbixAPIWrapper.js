@@ -530,12 +530,16 @@ function (angular, _) {
       return this.performZabbixAPIRequest('trigger.get', params);
     };
 
-    p.getAcknowledges = function(triggerids) {
+    p.getAcknowledges = function(triggerids, from) {
       var params = {
         output: 'extend',
         objectids: triggerids,
         acknowledged: true,
-        select_acknowledges: 'extend'
+        select_acknowledges: 'extend',
+        sortfield: 'clock',
+        sortorder: 'DESC',
+        time_from: from,
+        limit: 1
       };
 
       return this.performZabbixAPIRequest('event.get', params)
