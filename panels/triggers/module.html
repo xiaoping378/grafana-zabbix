@@ -7,21 +7,41 @@
           <th style="width: 50%">Issue</th>
           <th>Last change</th>
           <th>Age</th>
+          <th>Ack</th>
+          <th>Link</th>
         </tr>
       </thead>
       <tbody>
         <tr class="" ng-repeat="trigger in triggerList">
-          <td>
+          <td style="border-top-width: 1px">
             <span class="template-variable">{{trigger.host}}</span>
           </td>
-          <td>
-            {{trigger.description}}
+          <td style="border-top-width: 1px;
+                     height: 20px;
+                     padding: 2px">
+            <div style="background-color: {{trigger.color}};
+                        color: #000000;
+                        height:100%;
+                        padding: 6px;
+                        border-radius: 2px">
+              {{trigger.description}}
+            </div>
           </td>
           <td>
             {{trigger.lastchange}}
           </td>
           <td>
             {{trigger.age}}
+          </td>
+          <td>
+            Ack
+          </td>
+          <td>
+            <a href="{{trigger.url}}" target="_blank">
+              <span>
+                <i class="fa fa-external-link"></i>
+              </span>
+            </a>
           </td>
         </tr>
       </tbody>

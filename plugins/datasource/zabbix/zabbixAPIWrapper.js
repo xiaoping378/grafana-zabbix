@@ -517,7 +517,11 @@ function (angular, _) {
         output: 'extend',
         expandDescription: true,
         expandData: true,
-        only_true: true,
+        monitored: true,
+        //only_true: true,
+        filter: {
+          value: 1
+        },
         limit: limit
       };
 
