@@ -17,14 +17,27 @@
             <span class="template-variable">{{trigger.host}}</span>
           </td>
           <td style="border-top-width: 1px;
-                     height: 20px;
                      padding: 2px">
             <div style="background-color: {{trigger.color}};
-                        color: #000000;
-                        height:100%;
+                        color: #020202;
+                        height:80%;
                         padding: 6px;
                         border-radius: 2px">
               {{trigger.description}}
+              <a ng-if="trigger.comments"
+                 class="pointer"
+                 style="float: right; color: #101010"
+                 data-toggle="collapse"
+                 data-target="#comments-{{trigger.id}}"
+                 bs-tooltip="'Show additional trigger description'"
+                 data-placement="top">
+                <i class="fa fa-file-text-o"></i>
+              </a>
+            </div>
+            <div ng-if="trigger.comments" id="comments-{{trigger.id}}" class="collapse">
+              <div style="padding: 8px">
+                <small>{{trigger.comments}}</small>
+              </div>
             </div>
           </td>
           <td>
@@ -37,7 +50,7 @@
             Ack
           </td>
           <td>
-            <a href="{{trigger.url}}" target="_blank">
+            <a ng-if="trigger.url" href="{{trigger.url}}" target="_blank">
               <span>
                 <i class="fa fa-external-link"></i>
               </span>

@@ -86,8 +86,10 @@ function (angular, app, _, config, PanelMeta) {
             var ageUnix = now - lastchange + now.getTimezoneOffset() * 60000;
             var age = zabbixHelperSrv.toZabbixAgeFormat(ageUnix);
             return {
+              id: trigger.triggerid,
               host: trigger.host,
               description: trigger.description,
+              comments: trigger.comments,
               priority: trigger.priority,
               lastchange: lastchange.toLocaleString(),
               age: age.toLocaleString(),
