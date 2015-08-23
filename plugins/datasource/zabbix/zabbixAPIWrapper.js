@@ -522,19 +522,26 @@ function (angular, _) {
         filter: {
           value: 1
         },
-        limit: limit
+        limit: limit,
+        sortfield: 'lastchange',
+        sortorder: 'DESC'
       };
 
       return this.performZabbixAPIRequest('trigger.get', params);
+    };
 
-      /*return this.performZabbixAPIRequest('trigger.get', params)
-        .then(function (triggers) {
-          return _.map(triggers, function (trigger) {
-            return {
-              title: trigger.description
-            };
-          });
-        });*/
+    p.getAcknowledges = function(triggerids) {
+      var params = {
+        output: 'extend',
+        objectids: triggerids,
+        acknowledged: true,
+        select_acknowledges: 'extend'
+      };
+
+      return this.performZabbixAPIRequest('event.get', params)
+        .then(function (events) {
+          return _.flatten(_.map(events, 'acknowledges'));
+        });
     };
 
     p.getITService = function(/* optional */ serviceids) {

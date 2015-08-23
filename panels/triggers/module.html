@@ -7,8 +7,7 @@
           <th style="width: 50%">Issue</th>
           <th>Last change</th>
           <th>Age</th>
-          <th>Ack</th>
-          <th>Link</th>
+          <th>Info</th>
         </tr>
       </thead>
       <tbody>
@@ -20,7 +19,6 @@
                      padding: 2px">
             <div style="background-color: {{trigger.color}};
                         color: #020202;
-                        height:80%;
                         padding: 6px;
                         border-radius: 2px">
               {{trigger.description}}
@@ -28,15 +26,44 @@
                  class="pointer"
                  style="float: right; color: #101010"
                  data-toggle="collapse"
-                 data-target="#comments-{{trigger.id}}"
+                 data-target="#comments-{{trigger.triggerid}}"
                  bs-tooltip="'Show additional trigger description'"
                  data-placement="top">
                 <i class="fa fa-file-text-o"></i>
               </a>
             </div>
-            <div ng-if="trigger.comments" id="comments-{{trigger.id}}" class="collapse">
+            <!-- Trigger comments -->
+            <div ng-if="trigger.comments" id="comments-{{trigger.triggerid}}" class="collapse">
               <div style="padding: 8px">
                 <small>{{trigger.comments}}</small>
+              </div>
+            </div>
+            <!-- Trigger acknowledges -->
+            <div ng-if="trigger.acknowledges" id="acknowledges-{{trigger.triggerid}}" class="collapse">
+              <div style="padding-top: 12px;">
+                <table class="table table-condensed table-striped table-bordered"
+                       style="background-color: initial">
+                  <thead>
+                    <tr>
+                      <th><small>Time</small></th>
+                      <th>User</th>
+                      <th>Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="ack in trigger.acknowledges">
+                      <td>
+                        <small>{{ack.time}}</small>
+                      </td>
+                      <td>
+                        <small>{{ack.user}}</small>
+                      </td>
+                      <td>
+                        <small>{{ack.message}}</small>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </td>
@@ -47,12 +74,26 @@
             {{trigger.age}}
           </td>
           <td>
-            Ack
-          </td>
-          <td>
+            <!-- Trigger Url -->
             <a ng-if="trigger.url" href="{{trigger.url}}" target="_blank">
-              <span>
+              <span style="padding: 4px">
                 <i class="fa fa-external-link"></i>
+              </span>
+            </a>
+            <!-- Trigger state -->
+            <span ng-if="trigger.state === '1'"
+                  bs-tooltip="'{{trigger.error}}'"
+                  data-placement="top"
+                  style="padding: 4px">
+              <i class="fa fa-question-circle"></i>
+            </span>
+            <!-- Trigger acknowledges -->
+            <a ng-if="trigger.acknowledges"
+                  bs-tooltip="'Acknowledges'"
+                  data-toggle="collapse"
+                  data-target="#acknowledges-{{trigger.triggerid}}">
+              <span style="padding: 4px">
+                <i class="fa fa-comments"></i>
               </span>
             </a>
           </td>

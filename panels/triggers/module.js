@@ -19,7 +19,7 @@ function (angular, app, _, config, PanelMeta) {
     };
   });
 
-  module.controller('TriggersPanelCtrl', function($scope, panelSrv, backendSrv, zabbixHelperSrv) {
+  module.controller('TriggersPanelCtrl', function($q, $scope, panelSrv, backendSrv, zabbixHelperSrv) {
 
     $scope.panelMeta = new PanelMeta({
       panelName: 'Zabbix triggers',
@@ -77,27 +77,37 @@ function (angular, app, _, config, PanelMeta) {
       $scope.triggerColors = triggerColors;
 
       return $scope.datasource.zabbixAPI.getTriggers($scope.panel.limit)
-        .then(function(result) {
-          $scope.triggerList = _.map(result, function (trigger) {
+        .then(function(triggers) {
+          var promises = _.map(triggers, function (trigger) {
             var lastchange = new Date(+trigger.lastchange * 1000);
             var now = new Date();
 
             // Consider local time offset
             var ageUnix = now - lastchange + now.getTimezoneOffset() * 60000;
             var age = zabbixHelperSrv.toZabbixAgeFormat(ageUnix);
-            return {
-              id: trigger.triggerid,
-              host: trigger.host,
-              description: trigger.description,
-              comments: trigger.comments,
-              priority: trigger.priority,
-              lastchange: lastchange.toLocaleString(),
-              age: age.toLocaleString(),
-              url: trigger.url,
-              color: triggerColors[trigger.priority],
-            };
+            var triggerObj = trigger;
+            triggerObj.lastchange = lastchange.toLocaleString();
+            triggerObj.age = age.toLocaleString();
+            triggerObj.color = triggerColors[trigger.priority];
+
+            // Request acknowledges for trigger
+            return $scope.datasource.zabbixAPI.getAcknowledges(trigger.triggerid)
+              .then(function (acknowledges) {
+                if (acknowledges.length) {
+                  triggerObj.acknowledges = _.map(acknowledges, function (ack) {
+                    var time = new Date(+ack.clock * 1000);
+                    ack.time = time.toLocaleString();
+                    ack.user = ack.alias + ' (' + ack.name + ' ' + ack.surname + ')';
+                    return ack;
+                  });
+                }
+                return triggerObj;
+              });
           });
-          $scope.panelRenderingComplete();
+          return $q.all(promises).then(function (triggerList) {
+            $scope.triggerList = triggerList;
+            $scope.panelRenderingComplete();
+          });
         });
     };
 
